@@ -19,14 +19,56 @@ class Usuario
 
     public function buscar($id)
     {
+        try {
+
+            $sql = "SELECT * FROM {$this->table} WHERE id_usuario = :id;";
+            $stmt = $this->db->prepare($sql);
+            $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+            $stmt->execute();
+            $stmt->BlindParam(':id', $id, PDO::PARAM_INT);
+
+            if ($usuario) {
+
+                echo "ID: " . $id['id_usuario'] . "<br>";
+                echo "Nome: " . $id['nome'] . "<br>";
+                echo "Email: " . $id['email'] . "<br>";
+            }
+        } catch (PDOException $e)
+        {
+         echo "Erro na listagem dos dados" . $e->getMessage();
+        }
     }
 
     /**
      *Listar todos os registros da tabela usuário
      */
-    public function listar()
+    public function listar($id)
     {
+
+            try{
+      
+            $sql = "SELECT * FROM {$this->table} WHERE id_usuario = :id;";     
+            $stmt = $this->db->prepare($sql);   
+            $usuario=$stmt->fetch(PDO::FETCH_ASSOC);    
+            $stmt->execute();    
+            $stmt->BlindParam(':id', $id, PDO::PARAM_INT);
+      
+            if($usuario){
+      
+               echo "ID: ". $id['id_usuario']. "<br>";    
+               echo "Nome: ". $id['nome']. "<br>";     
+               echo "Email: ". $id['email']. "<br>";
+                         
+            }
+      
+            }catch(PDOException $e){
+      
+               echo "Erro na listagem dos dados" .$e->getMessage();
+      
+            }
     }
+
+
 
 
 
@@ -35,6 +77,7 @@ class Usuario
      * @param array $dados
      * @return boll
      */
+    
     public function cadastrar($dados)
     {
 
@@ -95,5 +138,15 @@ class Usuario
     //Excluir usuário
     public function excluir($id)
     {
+        try {
+            //MONTAGEM E PREPARAÇÃO DO SQL
+            $sql = "DELETE FROM {$this->table} WHERE id = :id";
+            $stmt = $this->db->prepare($sql);
+            //PASSAGEM DE PARAMETROS E EXECUÇÃO DO SQL
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            echo "Erro ao Deletar" . $e->getMessage();
+        }
     }
 }
