@@ -2,13 +2,13 @@
 
 require_once $_SERVER ['DOCUMENT_ROOT'] . "/database/DBConexao.php";
 
-class Livro{
+class Aluno{
 
  
 
    protected $db;
 
-   protected $table = "livros";
+   protected $table = "alunos";
 
  
 
@@ -32,7 +32,7 @@ class Livro{
 
    */
 
-   public function buscarLivro($id, $dados){
+   public function buscarAluno($id, $dados){
 
  
 
@@ -40,7 +40,7 @@ class Livro{
 
       try{
 
-         $query = "SELECT * FROM {$this->table} WHERE titulo = :titulo";
+         $query = "SELECT * FROM {$this->table} WHERE id_aluno = :id";
 
          $stmt = $this->db->prepare($query);  
 
@@ -72,11 +72,9 @@ class Livro{
 
     */
 
-   public function listarLivro(){
+   public function listarAluno(){
 
       try{
-
-         
 
          $query = "SELECT * FROM {$this->table}";
 
@@ -95,8 +93,6 @@ class Livro{
      }
 
    }
-
- 
 
    /**
 
@@ -118,25 +114,27 @@ class Livro{
 
       try{
 
-         $sql = "INSERT INTO {$this->table}(titulo, autor, numero_pagina, preco, ano_publicacao, isbn)
+         $sql = "INSERT INTO {$this->table}(nome, cpf, email, telefone, celular, data_nascimento)
 
-         VALUES(:titulo, :autor, :numero_pagina, :preco, :ano_publicacao, :isbn)";
+         VALUES(:nome, :cpf, :email, :telefone, :celular, :data_nascimento)";
 
          $stmt = $this->db->prepare($sql);
 
  
 
-         $stmt ->bindParam('titulo', $dados['titulo']);
+         $stmt ->bindParam('nome', $dados['nome']);
 
-         $stmt ->bindParam('autor', $dados['autor']);
+         $stmt ->bindParam('cpf', $dados['cpf']);
 
-         $stmt ->bindParam('numero_pagina', $dados['numero_pagina']);
+         $stmt ->bindParam('email', $dados['email']);
 
-         $stmt ->bindParam('preco', $dados['preco']);
+         $stmt ->bindParam('telefone', $dados['telefone']);
 
-         $stmt ->bindParam('ano_publicacao', $dados['ano_publicacao']);
+         $stmt ->bindParam('celular', $dados['celular']);
 
-         $stmt ->bindParam('isbn', $dados ['isbn']);
+         $stmt ->bindParam('data_nascimento', $dados ['data_nascimento']);
+
+         $stmt->execute();
 
          return true;
 
@@ -166,41 +164,43 @@ class Livro{
 
     */
 
-   public function editarLivro($isbn, $dados){
+   public function editarAluno($id, $dados){
 
  
 
       try{
 
-         $sql= ("UPDATE {$this->table} livros SET titulo = :titulo, autor = :autor, numero_pagina = :numero_pagina, preco = :preco, ano_publicacao = :ano_publicacao, isbn = :isbn;
+         $sql= ("UPDATE {$this->table} usuarios SET nome = :nome,  cpf = :cpf,email = :email,telefone = :telefone,celular = :celular, data_nascimento = :data_nascimento
 
-         WHERE isbn = :$isbn");
+         WHERE id_usuario = :$id");
+
+         $stmt = $this->db->prepare($sql);
 
  
 
-      $stmt = $this->db->prepare($sql);
+         $stmt ->bindParam('nome', $dados['nome']);
 
-      $stmt ->bindParam('titulo', $dados['titulo']);
+         $stmt ->bindParam('cpf', $dados['cpf']);
 
-      $stmt ->bindParam('autor', $dados['autor']);
+         $stmt ->bindParam('email', $dados['email']);
 
-      $stmt ->bindParam('numero_pagina', $dados['numero_pagina']);
+         $stmt ->bindParam('telefone', $dados['telefone']);
 
-      $stmt ->bindParam('preco', $dados['preco']);
+         $stmt ->bindParam('celular', $dados['celular']);
 
-      $stmt ->bindParam('ano_publicacao', $dados['ano_publicacao']);
+         $stmt ->bindParam('data_nascimento', $dados ['data_nascimento']);
 
-      $stmt ->bindParam('isbn', $dados ['isbn']);
+         $stmt->execute();
 
-      return true;
+         return true;
 
-     
+ 
 
       }catch(PDOException $e){
 
          echo "Erro na atualização dos dados: " . $e->getMessage();
 
-      return false;
+         return false;
 
       }  
 
@@ -208,7 +208,7 @@ class Livro{
 
    //Excluir dados do usuário.
 
-   public function excluir($id, $isbn){
+   public function excluir($id){
 
  
 
@@ -220,7 +220,7 @@ class Livro{
 
          //Montagem e preparação do SQL
 
-         $sql= "DELETE FROM {$this->table} WHERE isbn = isbn";
+         $sql= "DELETE FROM {$this->table} WHERE id = id_usuario";
 
          $stmt= $this->db->prepare($sql);
 
@@ -228,7 +228,7 @@ class Livro{
 
          //Passagem de parametros
 
-         $stmt->blindParam(':isbn', $isbn, PDO::PARAM_INT);
+         $stmt->blindParam(':id', $id, PDO::PARAM_INT);
 
          $stmt->execute();
 
@@ -236,7 +236,7 @@ class Livro{
 
       catch(PDOException $e){
 
-         echo "Erro na preparação da consulta do Livro:" . $e->getMessage();
+         echo "Erro na preparação da consulta do aluno:" . $e->getMessage();
 
       }
 
