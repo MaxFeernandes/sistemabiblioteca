@@ -1,19 +1,15 @@
 <?php
 
+session_start();
+
 require_once $_SERVER ['DOCUMENT_ROOT'] . "/database/DBConexao.php";
 
 class Usuario
 
 {
 
- 
-
     protected $db;
-
     protected $table = "usuarios";
-
- 
-
     public function __construct()
 
     {
@@ -41,27 +37,18 @@ class Usuario
         try{
 
             $query = "SELECT * FROM {$this->table} WHERE id_usuario = :id";
-
             $stmt = $this->db->prepare($query);  
-
             $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-
             $stmt->execute();
 
-           
-
             return $stmt->fetch(PDO::FETCH_OBJ);
-
- 
 
         }catch(PDOException $e ){
 
             echo 'Erro na inserção: ' . $e->getMessage();
 
             return null;
-
         }
-
     }
 
  
@@ -79,9 +66,7 @@ class Usuario
         try{
 
             $query = "SELECT * FROM {$this->table}";
-
             $stmt = $this->db->query($query);
-
             return $stmt->fetchAll(PDO::FETCH_OBJ);
 
            
@@ -117,24 +102,15 @@ class Usuario
             $query = "INSERT INTO {$this->table} (nome, email, senha, perfil) VALUES(:nome, :email, :senha, :perfil)";
 
             $stmt = $this->db->prepare($query);  
-
- 
-
             $stmt->bindParam(':nome', $dados['nome']);
-
             $stmt->bindParam(':email', $dados['email']);
-
             $stmt->bindParam(':senha', $dados['senha']);
-
             $stmt->bindParam(':perfil', $dados['perfil']);
 
-           
+            $_SESSION['sucesso'] = "Cadastro realizado com sucesso!";
 
             $stmt->execute();
-
             return true;
-
- 
 
         }catch(PDOException $e){
 
