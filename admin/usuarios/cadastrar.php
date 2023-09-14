@@ -38,7 +38,7 @@ $usuarioController->cadastrarUsuario();
             </div>
             
             <div class="col-12">
-                <button type="submit" class="btn btn-primary">Confirmar</button>
+                <button type="submit" class="btn btn-primary">Salvar</button>
                 <a href="index.php" class="btn btn-secondary">Cancelar</a>
             </div>
     </form>

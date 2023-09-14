@@ -37,7 +37,7 @@ Class UsuarioController{
 
      public function editarUsuario(){
 
-            $id = $_GET['id'];
+            $id_usuario = $_GET['id_usuario'];
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
            
             $dados = [ 
@@ -48,12 +48,19 @@ Class UsuarioController{
          
             ];
  
-            $this->usuarioModel->editar($id, $dados);
+            $this->usuarioModel->editar($id_usuario, $dados);
  
             header('Location: index.php ');
             exit;
      }
-     return $this->usuarioModel->buscarUsuario($id);
+     return $this->usuarioModel->buscarUsuario($id_usuario);
 
 }
+         public function excluirUsuario()
+        {
+            $this->usuarioModel->excluir($_GET['id_usuario']);
+
+            header('Location:index.php');
+            exit;
+        }
 }
